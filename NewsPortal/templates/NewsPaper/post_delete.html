@@ -1,0 +1,53 @@
+<! -- наследование шаблона default -->
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block content %}
+<h2>Вы действительно хотите удалить данную статью?</h2>
+<table>
+    <tr>
+        <td>
+            <b>
+                № поста
+            </b>
+        </td>
+        <td>
+            <b>
+                Заголовок
+            </b>
+        </td>
+
+        <td>
+            <b>
+                Дата публикации в формате (день.месяц.год)
+            </b>
+        </td>
+        <td>
+            <b>
+                Первые 20 слов текста статьи
+            </b>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            {{ post.id }}
+        </td>
+
+        <td>
+            {{ post.title|default:"Без заголовка"|truncatewords:4|censor:'***' }}
+        </td>
+        <td>
+            {{ post.date_created|default:"Без даты" }}
+        </td>
+        <td>
+            {{ post.content|truncatechars:20|censor:'***' }}
+        </td>
+    </tr>
+</table>
+ 
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+{% endblock content %} 

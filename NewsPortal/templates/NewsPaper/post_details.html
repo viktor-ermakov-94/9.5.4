@@ -1,0 +1,51 @@
+<! -- наследование шаблона default -->
+{% extends 'flatpages/default.html' %}
+ 
+{% block title %} Post details {% endblock title %}
+{% load custom_filters %}
+{% block content %}
+
+<table>
+    <tr>
+        <td>
+            <b>
+                № поста
+            </b>
+        </td>
+        <td>
+            <b>
+                Заголовок
+            </b>
+        </td>
+
+        <td>
+            <b>
+                Дата публикации в формате (день.месяц.год)
+            </b>
+        </td>
+        <td>
+            <b>
+                Первые 20 слов текста статьи
+            </b>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            {{ post.id }}
+        </td>
+
+        <td>
+            {{ post.title|default:"Без заголовка"|truncatewords:4|censor:'***' }}
+        </td>
+        <td>
+            {{ post.date_created|default:"Без даты" }}
+        </td>
+        <td>
+            {{ post.content|truncatechars:20|censor:'***' }}
+        </td>
+    </tr>
+</table>
+
+
+{% endblock content %}
