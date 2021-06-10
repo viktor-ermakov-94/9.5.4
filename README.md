@@ -419,6 +419,4 @@ paginate_by = 10
       {% endif %}
       <p>Objects {{ page_obj.start_index }}—{{ page_obj.end_index }}</p>
     {% endif %}
-       
-       
-       ![image](https://user-images.githubusercontent.com/24221744/121591466-3291cb80-ca42-11eb-949d-76680fed0dd5.png)
+
