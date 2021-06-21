@@ -47,9 +47,17 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
+    # для allauth добавляем следующие приложения
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # добавляем провайдеров, которые необходимо подключить (например, Google):
+    'allauth.socialaccount.providers.google',
+
     'django_filters',
 
     'NewsPaper',
+
 ]
 
 MIDDLEWARE = [
@@ -82,10 +90,35 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
+                # allauth
+                'django.template.context_processors.request'
+
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# добавим настройки о том, что поле email является обязательным и уникальным
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+# поле username необязательно
+ACCOUNT_USERNAME_REQUIRED = False
+# укажем, что аутентификация будет происходить посредством электронной почты
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# укажем, что верификация почты отсутствует (подтверждение аккаунта через письмо на почту)
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+# при успешной авторизации, пользователя перенаправит на домашнюю страницу
+LOGIN_REDIRECT_URL = 'home'
+# при неуспешной авторизации, пользователя должно перенаправить на страницу регистрации
+LOGIN_URL = '/accounts/login/'
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
@@ -139,7 +172,23 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '11904522129-bc1puonklcf5h87di7j56n8qma2fuh25.apps.googleusercontent.com',
+            'secret': '1XGC2Q8fpW2Dyvh22gwWhtsC',
+            'key': ''
+        }
+    }
+}

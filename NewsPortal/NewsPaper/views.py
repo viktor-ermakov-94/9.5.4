@@ -88,7 +88,9 @@ class PostSearch(ListView):
         # распаковываем self = Posts
         context = super().get_context_data(**kwargs)
         context['search'] = PostFilter(
+            # в переменной request хранятся данные запроса
             self.request.GET,
+            # Return the list of items for this view.
             queryset=self.get_queryset()
         )
         context['categories'] = PostCategory.objects.all()

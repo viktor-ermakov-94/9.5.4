@@ -5,7 +5,7 @@ from .views import PostsList, PostDetailedView, PostCreateView, PostSearch, Post
 from . import views
 
 urlpatterns = [
-    path('', PostsList.as_view()),
+    path('', PostsList.as_view(), name='home'),
 
     # детали поста
     path('<int:pk>/', PostDetailedView.as_view(), name='post_details'),
