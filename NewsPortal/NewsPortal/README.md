@@ -75,12 +75,13 @@ SITE_ID используется в случае, если данный прое
         <head>
             <title>{% block head_title %}{% endblock head_title %}</title>
         </head>
-        <body>
-            {% block body %}
-            {% block content %}
-            {% endblock content %}
-            {% endblock body %}
-            {% block extra_body %}
-            {% endblock extra_body %}
-        </body>
+            <body>
+                {% block body %}
+                    {% block content %}
+                    {% endblock content %}
+                {% endblock body %}
+                
+                {% block extra_body %}
+                {% endblock extra_body %}
+            </body>
     </html>

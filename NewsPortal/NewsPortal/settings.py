@@ -115,12 +115,18 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # укажем, что верификация почты отсутствует (подтверждение аккаунта через письмо на почту)
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+# если пользователь вышел, его перенаправит на страницу:
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 # при успешной авторизации, пользователя перенаправит на домашнюю страницу
 LOGIN_REDIRECT_URL = 'home'
 # при неуспешной авторизации, пользователя должно перенаправить на страницу регистрации
 LOGIN_URL = '/accounts/login/'
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
+
+# чтобы allauth выполнил именно эту форму при регистрации пользователя,
+# а не ту, что по умолчанию, напишем:
+ACCOUNT_FORMS = {'signup': 'NewsPaper.forms.BasicSignupForm'}
 
 
 # Database

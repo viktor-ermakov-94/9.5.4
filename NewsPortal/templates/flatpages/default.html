@@ -24,8 +24,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
       <a class="navbar-brand" href="#">News Portal</a>
+      <a class="navbar-brand" href="#">{{ user.username }}</a>
+
+
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
+
+
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
@@ -45,6 +51,22 @@
           <li class="nav-item">
             <a class="nav-link" href="/news/create/">Создать</a>
           </li>
+
+          {% if is_not_premium %}
+          <li class="nav-item">
+            <button1> <a class="nav-link" href="sign/upgrade/">Стать автором</a></button1>
+          </li>
+          {% endif %}
+
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/logout/">Выйти</a>
+            </li>
+          {% endif %}
+
+
+
+
 
         </ul>
       </div>

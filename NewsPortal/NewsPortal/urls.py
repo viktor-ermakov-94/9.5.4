@@ -29,5 +29,6 @@ urlpatterns = [
     #path('', include('NewsPaper.urls')),
 
     path('accounts/', include('allauth.urls')),
+
     
 ]

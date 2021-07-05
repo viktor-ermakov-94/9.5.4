@@ -1,9 +1,11 @@
 from datetime import datetime, timezone
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 
 # импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # импортируем модель Post из models.py
@@ -17,6 +19,17 @@ from django.core.paginator import Paginator
 
 # импортируем созданную нами форму
 from .forms import PostForm  # т.к. мы создали именно class PostForm(ModelForm)
+
+# импортируем модель групп, redirect и декоратор проверки аутентификации.
+from django.shortcuts import redirect
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+
+# для ограничения прав доступа импортируем соответствующий миксин
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+# для добавления новой статьи
+from django.views.generic.edit import CreateView
 
 
 # создадим модель объектов, которые будем выводить
@@ -63,6 +76,21 @@ class PostsList(ListView):
             form.save()
         return super().get(request, *args, **kwargs)
 
+    # проверем, находится или нет пользователь в группе premium
+    # делаем запрос на получение содержания (контекста)
+    def get_context_data(self, **kwargs):
+        # получаем весь контекст из класса родителя
+        context = super().get_context_data(**kwargs)
+        # добавляем новую переменную в Qset полученного контекста:
+        # запрашиваем есть ли текущий пользователь в группе по фильтру author,
+        # метод exists() вернет True, если группа premium находится в списке групп пользователя
+        # not True даст False - а нам нужен True
+        # если пользователь не находится в этой группе, то exist() вернет False. not False вернет True - то, что нужно
+        context['is_not_premium'] = not self.request.user.groups.filter(name='author').exists()
+        # context['is_not_premium'] = True
+        # возвращаем контекст
+        return context
+
 
 # пост детально
 class PostDetailedView(DetailView):
@@ -71,15 +99,17 @@ class PostDetailedView(DetailView):
 
 
 # создание поста
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Post
     template_name = 'newspaper/post_create.html'
     form_class = PostForm
+    permission_required = 'NewsPaper.add_post'
 
 
 class PostSearch(ListView):
     model = Post  # в нашем случае модель - Post (статья/новость)
     template_name = 'newspaper/post_search.html'
-    #context_object_name = 'post_search'
+    # context_object_name = 'post_search'
     paginate_by = 10
     form_class = PostForm
 
@@ -99,9 +129,10 @@ class PostSearch(ListView):
 
 
 # напишем дженерик для редактирования новостей
-class PostUpdate(UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
     template_name = 'newspaper/post_create.html'
     form_class = PostForm
+    permission_required = 'NewsPaper.change_post'
 
     def get_object(self, **kwargs):
         id = self.kwargs.get('pk')
@@ -109,9 +140,24 @@ class PostUpdate(UpdateView):
 
 
 # дженерик для удаления новости
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'newspaper/post_delete.html'
     form_class = PostForm
     queryset = Post.objects.all()
     success_url = '/news/'
+    permission_required = 'NewsPaper.delete_post'
 
+
+# функция добавляет пользователя в группу premium
+@login_required  # upgrade_me = login_required(upgrade_me) декоратор проверяет if user is logged in
+def upgrade_me(request):
+    # запросим объект текущего пользователя пользователя из запроса
+    user = request.user
+    # получим группу 'author' из модели групп
+    premium_group = Group.objects.get(name='author')
+    # проверим, чтобы пользователь не состоят в группе 'author'
+    if not request.user.groups.filter(name='author').exists():
+        # раз пользователь в этой группе не состоит, добавим его туда
+        premium_group.user_set.add(user)
+    # при любом раскладе, перенаправляем пользователя на страницу со списком новостей, используя метод redirect
+    return redirect('/news')
