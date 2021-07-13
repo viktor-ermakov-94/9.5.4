@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # импортируем модель Post из models.py
-from .models import Post, PostCategory
+from .models import Post, PostCategory, Profile
 
 # импортируем наш фильтр
 from .search import PostFilter
@@ -160,4 +160,13 @@ def upgrade_me(request):
         # раз пользователь в этой группе не состоит, добавим его туда
         premium_group.user_set.add(user)
     # при любом раскладе, перенаправляем пользователя на страницу со списком новостей, используя метод redirect
+    return redirect('/news')
+
+
+@login_required
+def subscribe(request):
+    user = request.user
+    category = Profile.category.get(name='category')
+    if not request.category.get(email=user):
+        category.user_set.add(user)
     return redirect('/news')

@@ -30,5 +30,7 @@ urlpatterns = [
 
     path('accounts/', include('allauth.urls')),
 
+    path('make_appointment/', include('appointment.urls', namespace='appointment')),
+
     
 ]

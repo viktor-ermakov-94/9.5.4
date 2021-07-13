@@ -6,6 +6,7 @@ from . import views
 # импортируем функцию, которую мы написали для добавления пользователя в группу premium
 from .views import upgrade_me
 
+
 urlpatterns = [
     path('', PostsList.as_view(), name='home'),
 
@@ -24,6 +25,9 @@ urlpatterns = [
     # в HTML-шаблоне default.html (<button1> <a class="nav-link" href="sign/upgrade/">Хочу Premium!</a></button1>)
     # после того, как гиперссылка сработает, запускается функция upgrade_me
     path('sign/upgrade/', upgrade_me, name='upgrade'),
+
+
+
 
 ]
 

@@ -37,14 +37,24 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.author.username.title()}'
 
+
 # создаем модель категории статьи/новости
 class Category(models.Model):
     # категории статей/новостей - темы, которые они отражают (спорт, политика, образование и т. д.)
     # данное поле делаем уникальным
     article_category = models.CharField(max_length=255, unique=True)
 
+    # подписка на категорию новостей для пользователей
+    subscribers = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         return f'{self.article_category}'
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+
 
 # создаем модель пост
 class Post(models.Model):
@@ -102,19 +112,18 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title.title()}: {self.content[:20]}'
 
-
     # добавим абсолютный путь, чтобы после создания новости, нас перебрасывало на страницу с постом
     def get_absolute_url(self):
         return f'/news/{self.id}'
 
-
     # создаем промежуточную модель PostCategory
+
+
 class PostCategory(models.Model):
     # связь «один ко многим» с моделью Post
     post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
     # связь «один ко многим» с моделью Category
     category_category = models.ManyToManyField(Category)
-
 
 
 # создаем модель Comment, чтобы можно было под каждой новостью/статьей оставлять комментарии
@@ -141,4 +150,3 @@ class Comment(models.Model):
         self.comment_rate -= 1
         # сохранение значения в базу данных
         self.save()
-
