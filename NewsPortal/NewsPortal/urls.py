@@ -26,11 +26,13 @@ urlpatterns = [
     # чтобы все адреса из файла NewsPaper/urls.py
     # сами автоматически подключались когда мы их добавим.
     path('news/', include('NewsPaper.urls')),
-    #path('', include('NewsPaper.urls')),
+    path('', include('NewsPaper.urls')),
 
     path('accounts/', include('allauth.urls')),
 
     path('make_appointment/', include('appointment.urls', namespace='appointment')),
+
+    #path('appointment/', include(('appointment.urls', 'appointment'), namespace='appointment')),
 
     
 ]

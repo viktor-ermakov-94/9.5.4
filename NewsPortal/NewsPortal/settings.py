@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -44,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # надо указать не имя нашего приложения, а его конфиг, чтобы всё заработало
+    'appointment.apps.AppointmentConfig',
+
+    'NewsPaper.apps.NewspaperConfig',
+    
     'django.contrib.sites',
     'django.contrib.flatpages',
 
@@ -56,10 +61,12 @@ INSTALLED_APPS = [
 
     'django_filters',
 
-    'NewsPaper',
-    'appointment',
+    #'NewsPaper',
+    #'appointment',
 
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -115,20 +122,21 @@ ACCOUNT_USERNAME_REQUIRED = False
 # укажем, что аутентификация будет происходить посредством электронной почты
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # укажем, что верификация почты отсутствует (подтверждение аккаунта через письмо на почту)
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# тема письма для подтверждения регистрации
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Skillfactory sends it's regards. "
 # если пользователь вышел, его перенаправит на страницу:
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 # при успешной авторизации, пользователя перенаправит на домашнюю страницу
 LOGIN_REDIRECT_URL = 'home'
 # при неуспешной авторизации, пользователя должно перенаправить на страницу регистрации
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/accounts/signup/'
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
 # чтобы allauth выполнил именно эту форму при регистрации пользователя,
 # а не ту, что по умолчанию, напишем:
 ACCOUNT_FORMS = {'signup': 'NewsPaper.forms.BasicSignupForm'}
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -139,7 +147,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -159,7 +166,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -173,13 +179,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -206,9 +209,23 @@ EMAIL_HOST_USER = 'FPW-13'  # ваше имя пользователя, напр
 EMAIL_HOST_PASSWORD = 'dV8-Zxg-ebQ-wZ3'  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 
+# указываем ПОЛНУЮ почту, с которой будут отправляться письма
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
 ADMINS = [
     ('Bulat', 'bulat_man@mail.ru'),
     # список всех админов в формате ('имя', 'их почта')
 ]
+
+# для отправки писем менеджерам через функцию mail_managers
+MANAGERS = [
+    ('Bulat', 'FPW-13@yandex.ru'),
+]
+
 SERVER_EMAIL = 'FPW-13@yandex.ru'  # это будет у нас вместо аргумента FROM в массовой рассылке
+
+# True позволит избежать дополнительных действий и активирует аккаунт сразу, как только мы перейдем по ссылке
+# False попросит подтвердить ещё раз на сайте после прохождения по ссылке
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+# количество дней, в течение которых будет доступна ссылка на подтверждение регистрации
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
