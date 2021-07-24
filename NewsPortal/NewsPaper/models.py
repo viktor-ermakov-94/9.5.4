@@ -38,22 +38,23 @@ class Author(models.Model):
         return f'{self.author.username.title()}'
 
 
-# создаем модель категории статьи/новости
+# создаем модель - либо это будет статья, либо это будет только новость
 class Category(models.Model):
     # категории статей/новостей - темы, которые они отражают (спорт, политика, образование и т. д.)
     # данное поле делаем уникальным
     article_category = models.CharField(max_length=255, unique=True)
 
-    # подписка на категорию новостей для пользователей
-    subscribers = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-
+    # эта функция позволяет вернуть поле article_category при вызове экземпляра модели Category
     def __str__(self):
         return f'{self.article_category}'
 
+    subscribers = models.ManyToManyField(User, null=True, blank=True, related_name='subscribers')
 
-class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+
+#
+# class Subscription(models.Model):
+#     # подписка на категорию новостей для пользователей
+#     subscribers = models.ManyToManyField(User)
 
 
 # создаем модель пост
@@ -61,7 +62,7 @@ class Post(models.Model):
     # связь один ко многим с Author
     post_author = models.ForeignKey(Author, on_delete=models.CASCADE)
     # связь многие ко многим с Category
-    post_category = models.ManyToManyField(Category)
+    post_category = models.ManyToManyField(Category, related_name='post_category')
 
     """ <<< Настройка выбора категории поста >>> """
     # варианты для поля с выбором (статья или новость)
@@ -119,11 +120,11 @@ class Post(models.Model):
     # создаем промежуточную модель PostCategory
 
 
-class PostCategory(models.Model):
-    # связь «один ко многим» с моделью Post
-    post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
-    # связь «один ко многим» с моделью Category
-    category_category = models.ManyToManyField(Category)
+# class PostCategory(models.Model):
+#     # связь «один ко многим» с моделью Post
+#     post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
+#     # связь «один ко многим» с моделью Category
+#     category_category = models.ManyToManyField(Category)
 
 
 # создаем модель Comment, чтобы можно было под каждой новостью/статьей оставлять комментарии

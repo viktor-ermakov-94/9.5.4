@@ -69,6 +69,17 @@
             <td>
                 {{ post.content|truncatechars:20|censor:'***' }}
             </td>
+
+             <td>
+                 {{ post.post_category.article_category }}
+                {% for category in category %}
+                    {{ category.article_category }}
+                {% endfor %}
+            </td>
+
+
+
+
         {% endfor %}
         </tr>
     </table>

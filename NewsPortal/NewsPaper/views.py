@@ -1,7 +1,8 @@
 from datetime import datetime, timezone
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.db.models import Prefetch
+from django.shortcuts import render, get_object_or_404
 
 # импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
@@ -9,7 +10,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # импортируем модель Post из models.py
-from .models import Post, PostCategory, Profile
+from .models import Post, Category#, PostCategory
 
 # импортируем наш фильтр
 from .search import PostFilter
@@ -104,6 +105,7 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'newspaper/post_create.html'
     form_class = PostForm
     permission_required = 'NewsPaper.add_post'
+    print(model.objects.all())
 
 
 class PostSearch(ListView):
@@ -164,9 +166,31 @@ def upgrade_me(request):
 
 
 @login_required
-def subscribe(request):
-    user = request.user
-    category = Profile.category.get(name='category')
-    if not request.category.get(email=user):
-        category.user_set.add(user)
+def subscribe(request, **kwargs):  # request = <WSGIRequest: GET '/subscribe/'> - то есть к нам возвращается urls адрес,
+    # который мы записали в html шаблоне кнопки
+    pk = kwargs['pk']  # 0 то же самое можно записать, как: pk = kwargs.get('pk')
+
+    my_post = Post.objects.get(id=pk).post_category.values()
+    print(f"my_post:  {my_post} ")
+    for i in my_post:
+        post_cat_id = i['id']
+    print(f"id={post_cat_id}")
+
+    # находим объекты категории, с которыми связан данный пост,
+    # и добавляем текущего пользователя в поле subscribers моделей
+    Category.objects.get(id=post_cat_id).subscribers.add(request.user)
+
+    subscribers = Category.objects.filter(subscribers=request.user)
+    print(f"subscribed categories={subscribers}")
+
+    for i in subscribers:
+        print('Эта новость относится к категории:', i)
+
+    print(my_post.filter(subscribers=request.user.id).exists())
+
+
+
+
     return redirect('/news')
+
+

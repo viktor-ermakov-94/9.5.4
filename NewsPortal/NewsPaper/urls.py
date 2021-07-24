@@ -4,7 +4,7 @@ from django.urls import path
 from .views import PostsList, PostDetailedView, PostCreateView, PostSearch, PostUpdate, PostDelete
 from . import views
 # импортируем функцию, которую мы написали для добавления пользователя в группу premium
-from .views import upgrade_me
+from .views import upgrade_me, subscribe
 
 
 urlpatterns = [
@@ -26,6 +26,8 @@ urlpatterns = [
     # после того, как гиперссылка сработает, запускается функция upgrade_me
     path('sign/upgrade/', upgrade_me, name='upgrade'),
 
+    path('<int:pk>/subscribe/', subscribe, name='subscription'),
+    #path('subscribe/', subscribe, name='subscription'),
 
 
 
