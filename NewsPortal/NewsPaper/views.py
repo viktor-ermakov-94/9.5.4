@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # импортируем модель Post из models.py
-from .models import Post, Category#, PostCategory
+from .models import Post, Category  # , PostCategory
 
 # импортируем наш фильтр
 from .search import PostFilter
@@ -171,26 +171,10 @@ def subscribe(request, **kwargs):  # request = <WSGIRequest: GET '/subscribe/'> 
     pk = kwargs['pk']  # 0 то же самое можно записать, как: pk = kwargs.get('pk')
 
     my_post = Post.objects.get(id=pk).post_category.values()
-    print(f"my_post:  {my_post} ")
+
     for i in my_post:
-        post_cat_id = i['id']
-    print(f"id={post_cat_id}")
-
-    # находим объекты категории, с которыми связан данный пост,
-    # и добавляем текущего пользователя в поле subscribers моделей
-    Category.objects.get(id=post_cat_id).subscribers.add(request.user)
-
-    subscribers = Category.objects.filter(subscribers=request.user)
-    print(f"subscribed categories={subscribers}")
-
-    for i in subscribers:
-        print('Эта новость относится к категории:', i)
-
-    print(my_post.filter(subscribers=request.user.id).exists())
-
-
-
+        # находим объекты категории, с которыми связан данный пост,
+        # и добавляем текущего пользователя в поле subscribers моделей
+        Category.objects.get(id=i['id']).subscribers.add(request.user)
 
     return redirect('/news')
-
-
