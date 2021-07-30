@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.db.models import Sum
 from django.template.defaultfilters import truncatewords
@@ -122,7 +122,6 @@ class Post(models.Model):
         return request.HttpRequest.build_absolute_uri(self)
 
 
-
 # создаем промежуточную модель PostCategory
 # class PostCategory(models.Model):
 #     # связь «один ко многим» с моделью Post
@@ -155,3 +154,8 @@ class Comment(models.Model):
         self.comment_rate -= 1
         # сохранение значения в базу данных
         self.save()
+
+
+# # кастомизируем страницу с регистрацией пользователя
+# class CustomUser(AbstractUser):
+#      = models.CharField(max_length=12)

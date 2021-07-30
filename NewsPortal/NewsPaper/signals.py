@@ -28,13 +28,10 @@ def new_post(sender, action, instance, **kwargs):
     # если проходит команда post_add, то есть добавляется новость,
     # то выполняются следующие действия:
     if action == 'post_add':
+        # достаём путь news/id новости
         post_url = instance.get_absolute_url()
-        # print(request.HttpRequest.META.get('HTTP_REFERER'))
-        # print(instance.get_full_path())
-        full_url = ''.join(['http://', get_current_site(None).domain, ':8000'])
-        print(full_url + post_url)
-
-        # print(post_url)
+        # достаём ip адрес домена, добавляем к нему порт и http:// и добавляем путь до самой новости
+        full_url = ''.join(['http://', get_current_site(None).domain, ':8000']) + post_url
 
         # для каждого из экземпляров категорий созданной новости
         # (например,если у новости две категории, то для каждой из них)
@@ -58,23 +55,14 @@ def new_post(sender, action, instance, **kwargs):
                     recipient_list=[cat.email]
                 )
 
-                print(cat.email)
 
-
+# отправка письма после подтверждения электронной почты
 @receiver(email_confirmed)
 def user_signed_up(request, email_address, **kwargs):
-    user = User
-    # send_mail(
-    #     subject=f'Welcome to my News Portal, "{user.first_name}"!',
-    #     message=f'Hello Mr or Mrs {user.last_name}',
-    #     from_email='FPW-13@yandex.ru',
-    #     recipient_list=[user.email]
-    # )
-    print(f'Email for a {user.first_name} is sent')
-
-
-# def email_confirmed_(request, email_address, **kwargs):
-#     user = email_address.user
-#     user.email_verified = True
-#
-#     user.save()
+    # отправляется письмо пользователю, чья почта была подтверждена
+    send_mail(
+        subject=f'Dear {email_address.user} Welcome to my News Portal!',
+        message=f'Приветствую Вас на моём новостном портале. Здесь самые последние новости из разных категорий',
+        from_email='FPW-13@yandex.ru',
+        recipient_list=[email_address.user.email]
+    )

@@ -3,6 +3,10 @@ from .models import Post
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 
+# кастомизируем страницу с регистрацией пользователя
+from django import forms
+from .models import *
+
 
 # создаём модельную форму
 class PostForm(ModelForm):
@@ -20,6 +24,9 @@ class PostForm(ModelForm):
 #    Создадим модель BasicSignupForm, на основе модели из библиотеки allauth,
 #    унаследовав модель SignupForm
 class BasicSignupForm(SignupForm):
+    # самостоятельно добавил поля при регистрации для того, чтобы можно было заполнить имя и фамилию пользователя
+    first_name = forms.CharField(max_length=12, label='Имя')
+    last_name = forms.CharField(max_length=12, label='Фамилия')
 
     # работаем с методом save()
     def save(self, request):

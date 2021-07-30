@@ -143,6 +143,7 @@ WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 # а не ту, что по умолчанию, напишем:
 ACCOUNT_FORMS = {'signup': 'NewsPaper.forms.BasicSignupForm'}
 
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
