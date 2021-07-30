@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # добавляем приложение для запуска периодических задач
+    'django_apscheduler',
 
     # 'debug_toolbar',
 
@@ -50,7 +52,7 @@ INSTALLED_APPS = [
     'appointment.apps.AppointmentConfig',
 
     'NewsPaper.apps.NewspaperConfig',
-    
+
     'django.contrib.sites',
     'django.contrib.flatpages',
 
@@ -63,8 +65,8 @@ INSTALLED_APPS = [
 
     'django_filters',
 
-    #'NewsPaper',
-    #'appointment',
+    # 'NewsPaper',
+    # 'appointment',
 
 ]
 
@@ -236,3 +238,9 @@ SERVER_EMAIL = 'FPW-13@yandex.ru'  # это будет у нас вместо а
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # количество дней, в течение которых будет доступна ссылка на подтверждение регистрации
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+
+# Указываем формат даты для scheduler
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+# Время на выполнение задачи (задача снимается, если не успеет выполниться)
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # seconds

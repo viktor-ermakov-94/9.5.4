@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 from django.template.defaultfilters import truncatewords
+from django.http import request, HttpRequest
 
 
 # создаем модель автора
@@ -117,9 +118,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return f'/news/{self.id}'
 
-    # создаем промежуточную модель PostCategory
+    def get_full_path(self):
+        return request.HttpRequest.build_absolute_uri(self)
 
 
+
+# создаем промежуточную модель PostCategory
 # class PostCategory(models.Model):
 #     # связь «один ко многим» с моделью Post
 #     post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
