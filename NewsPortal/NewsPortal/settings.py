@@ -245,3 +245,5 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
 # Время на выполнение задачи (задача снимается, если не успеет выполниться)
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # seconds
+
+

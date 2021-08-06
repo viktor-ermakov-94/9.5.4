@@ -93,6 +93,18 @@ class PostsList(ListView):
         return context
 
 
+class WeekList(ListView):
+    model = Post
+    template_name = 'newspaper/week_posts.html'
+    context_object_name = 'week_posts'
+    form_class = PostForm
+
+    def get_context_data(self, **kwargs):
+        # получаем весь контекст из класса родителя
+        context = super().get_context_data(**kwargs)
+        return context
+
+
 # пост детально
 class PostDetailedView(DetailView):
     template_name = 'newspaper/post_details.html'

@@ -5,9 +5,12 @@ from django.db import models
 from django.db.models import Sum
 from django.template.defaultfilters import truncatewords
 from django.http import request, HttpRequest
-
+from django.conf import settings
 
 # создаем модель автора
+
+
+
 class Author(models.Model):
     # рейтинг пользователя
     user_rate = models.IntegerField(default=0)
@@ -49,13 +52,7 @@ class Category(models.Model):
     def __str__(self):
         return f'{self.article_category}'
 
-    subscribers = models.ManyToManyField(User, null=True, blank=True, related_name='subscribers')
-
-
-#
-# class Subscription(models.Model):
-#     # подписка на категорию новостей для пользователей
-#     subscribers = models.ManyToManyField(User)
+    subscribers = models.ManyToManyField(User, null=True, blank=True, related_name='subscriber')
 
 
 # создаем модель пост
@@ -123,11 +120,13 @@ class Post(models.Model):
 
 
 # создаем промежуточную модель PostCategory
-# class PostCategory(models.Model):
-#     # связь «один ко многим» с моделью Post
-#     post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
-#     # связь «один ко многим» с моделью Category
-#     category_category = models.ManyToManyField(Category)
+class PostCategory(models.Model):
+    # связь «один ко многим» с моделью Post
+    post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
+    # связь «один ко многим» с моделью Category
+    category_category = models.ManyToManyField(Category)
+
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
 
 # создаем модель Comment, чтобы можно было под каждой новостью/статьей оставлять комментарии
