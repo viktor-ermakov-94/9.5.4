@@ -46,12 +46,15 @@ INSTALLED_APPS = [
     # добавляем приложение для запуска периодических задач
     'django_apscheduler',
 
+    'django_celery_beat',
+    'django_celery_results',
+
     # 'debug_toolbar',
 
     # надо указать не имя нашего приложения, а его конфиг, чтобы всё заработало
     'appointment.apps.AppointmentConfig',
 
-    'NewsPaper.apps.NewspaperConfig',
+    # 'NewsPaper.apps.NewspaperConfig',
 
     'django.contrib.sites',
     'django.contrib.flatpages',
@@ -65,7 +68,7 @@ INSTALLED_APPS = [
 
     'django_filters',
 
-    # 'NewsPaper',
+    'NewsPaper',
     # 'appointment',
 
 ]
@@ -142,7 +145,6 @@ WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 # чтобы allauth выполнил именно эту форму при регистрации пользователя,
 # а не ту, что по умолчанию, напишем:
 ACCOUNT_FORMS = {'signup': 'NewsPaper.forms.BasicSignupForm'}
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -246,4 +248,28 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 # Время на выполнение задачи (задача снимается, если не успеет выполниться)
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # seconds
 
+# Настройки Celery
 
+# URL брокера сообщений (Redis). По умолчанию он находится на порту 6379
+CELERY_BROKER_URL = 'redis://localhost:6379'
+
+# хранилище результатов выполнения задач
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+# допустимый формат данных
+CELERY_ACCEPT_CONTENT = ['application/json']
+
+# метод сериализации задач
+CELERY_TASK_SERIALIZER = 'json'
+
+# метод сериализации результатов
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# подключаем таски, чтоб Селери их нашёл
+CELERY_IMPORTS = (
+    'NewsPaper.newsletter.tasks',
+)

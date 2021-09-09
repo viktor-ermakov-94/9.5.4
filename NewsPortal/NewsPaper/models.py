@@ -7,8 +7,8 @@ from django.template.defaultfilters import truncatewords
 from django.http import request, HttpRequest
 from django.conf import settings
 
-# создаем модель автора
 
+# создаем модель автора
 
 
 class Author(models.Model):
@@ -153,7 +153,6 @@ class Comment(models.Model):
         self.comment_rate -= 1
         # сохранение значения в базу данных
         self.save()
-
 
 # # кастомизируем страницу с регистрацией пользователя
 # class CustomUser(AbstractUser):
