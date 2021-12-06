@@ -6,16 +6,19 @@ from . import views
 # импортируем функцию, которую мы написали для добавления пользователя в группу premium
 from .views import upgrade_me, subscribe
 
+# добавляем настройки для кэширования
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
-    path('', PostsList.as_view(), name='home'),
+    path('', cache_page(60*1)(
+        PostsList.as_view()), name='home'),
 
     # детали поста
     path('<int:pk>/', PostDetailedView.as_view(), name='post_details'),
     # создание поста
     path('create/', PostCreateView.as_view(), name='post_create'),
 
-    path('search/', PostSearch.as_view(), name='post_search'),
+    path('search/', cache_page(60*5) (PostSearch.as_view()), name='post_search'),
 
     path('create/<int:pk>', PostUpdate.as_view(), name='post_update'),
 
@@ -27,9 +30,6 @@ urlpatterns = [
     path('sign/upgrade/', upgrade_me, name='upgrade'),
 
     path('<int:pk>/subscribe/', subscribe, name='subscription'),
-    #path('subscribe/', subscribe, name='subscription'),
-
-
+    # path('subscribe/', subscribe, name='subscription'),
 
 ]
-

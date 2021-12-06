@@ -10,7 +10,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 # импортируем модель Post из models.py
-from .models import Post, Category  # , PostCategory
+from .models import Post, Category, PostCategory
 
 # импортируем наш фильтр
 from .search import PostFilter
@@ -31,6 +31,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # для добавления новой статьи
 from django.views.generic.edit import CreateView
+
+# импортируем кэш
+from django.core.cache import cache
 
 
 # создадим модель объектов, которые будем выводить
@@ -109,6 +112,22 @@ class WeekList(ListView):
 class PostDetailedView(DetailView):
     template_name = 'newspaper/post_details.html'
     queryset = Post.objects.all()
+
+    # достаём объект из кэша
+    def get_object(self, *args, **kwargs):
+        # забираем значение из кэша по ключу, если ключа нет, то забираем None
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+
+        # если в кэше нет объекта, то получаем его у класса родителя и записываем в кэш
+        if not obj:
+            obj = super().get_object(*args, **kwargs)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+
+        return obj
+
+
+
+
 
 
 # создание поста
