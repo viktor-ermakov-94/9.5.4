@@ -1,3 +1,5 @@
+
+
 ### Модуль D4.2.
 GET-параметры в действии & django_filter & Paginator
 
