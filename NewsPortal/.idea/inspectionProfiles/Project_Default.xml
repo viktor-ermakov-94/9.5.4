@@ -1,0 +1,22 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="telebot.TeleBot" />
+          <option value="django.db.models.fields.related.ForeignKey.price" />
+          <option value="django.db.models.fields.CharField.split" />
+          <option value="NewsPaper.news.models.Order.complete" />
+          <option value="datetime.timezone.now" />
+          <option value="NewsPortal.NewsPaper.models.Author.post_set" />
+          <option value="django.db.models.fields.related.OneToOneField.comment_set" />
+          <option value="Catalogue.busbar.models.adaptor" />
+          <option value="NewsPortal.appointment.apps.appointment" />
+          <option value="NewsPortal.NewsPaper.views.article_category" />
+          <option value="NewsPortal.settings" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
