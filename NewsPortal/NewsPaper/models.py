@@ -60,7 +60,7 @@ class Post(models.Model):
     # связь один ко многим с Author
     post_author = models.ForeignKey(Author, on_delete=models.CASCADE)
     # связь многие ко многим с Category
-    post_category = models.ManyToManyField(Category, related_name='post_category')
+    post_category = models.ManyToManyField(Category, related_name='post_category', )
 
     """ <<< Настройка выбора категории поста >>> """
     # варианты для поля с выбором (статья или новость)
@@ -117,6 +117,12 @@ class Post(models.Model):
 
     def get_full_path(self):
         return request.HttpRequest.build_absolute_uri(self)
+
+    # допишем свойство, которое будет отображать статьи с нулевым рейтингом в админке
+    @property
+    def zero_rated(self):
+        return self.post_rate == 0
+
 
 
 # создаем промежуточную модель PostCategory
