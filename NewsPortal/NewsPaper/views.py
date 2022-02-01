@@ -35,6 +35,17 @@ from django.views.generic.edit import CreateView
 # импортируем кэш
 from django.core.cache import cache
 
+# импортируем логгер
+import logging
+
+logger = logging.getLogger(__name__)  # dundername берет название приложения, как имя логгера
+
+
+def index(request):
+    logger.info('INFO')
+
+def debugger(request):
+    logger.debug('DEBUG')
 
 # создадим модель объектов, которые будем выводить
 # Используется ListView - определяет список объектов, которые хотим отобразить.
@@ -124,10 +135,6 @@ class PostDetailedView(DetailView):
             cache.set(f'post-{self.kwargs["pk"]}', obj)
 
         return obj
-
-
-
-
 
 
 # создание поста

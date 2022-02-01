@@ -16,9 +16,9 @@ urlpatterns = [
     # детали поста
     path('<int:pk>/', PostDetailedView.as_view(), name='post_details'),
     # создание поста
-    path('create/', PostCreateView.as_view(), name='post_create'),
+    path('create/', cache_page(60*5) (PostCreateView.as_view()), name='post_create'),
 
-    path('search/', cache_page(60*5) (PostSearch.as_view()), name='post_search'),
+    path('search/', (PostSearch.as_view()), name='post_search'),
 
     path('create/<int:pk>', PostUpdate.as_view(), name='post_update'),
 

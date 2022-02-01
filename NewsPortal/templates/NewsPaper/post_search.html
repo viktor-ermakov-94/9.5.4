@@ -1,6 +1,7 @@
 <! -- наследование шаблона default -->
 {% extends 'flatpages/default.html' %}
 
+
 {% block title %} Find News {% endblock title %}
 
 {% load custom_filters %}
@@ -10,21 +11,26 @@
 <! -- начало контента -->
 {% block content %}
 
+{% include 'NewsPaper/test.html' %}
 
 <hr>
 
-<!-- Перед таблицей добавим форму для поиска -->
+{% comment %} <!-- Перед таблицей добавим форму для поиска --> {% endcomment %}
 <form method="GET">
 	{% load cache %}
     {% cache None searching_form %}
+
+
     {{ search.form }} <!-- Форму от фильтров за нас сделает django.
     А вот кнопку, увы придётся делать самому -->
+
     <input type="submit" value="Найти">
 	{% endcache %}
 </form>
 
 
 <h1>Новости</h1>
+
 
 {% load cache %} <!-- Загружаем кэширование -->
     {% cache 3 news list %} <!-- Кэшируем отдельный блок на 30 секунд -->
@@ -99,6 +105,7 @@
 {% endif %}
 
 
+
 <br>
 
 <!-- блок пагинатора -->
@@ -127,6 +134,17 @@
 
 
 
+
+
+
+
+
+
+
+
+{% autoescape off %}
+	<p><strong> You are </strong><em>pretty</em> smart!</p>
+{% endautoescape %}
 
 
 <! -- конец контента -->

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-o05f1yuuqfpeln3*2onu27=zf9_$w@su=((&xgu@c8s86mo89*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 SITE_ID = 1
 
@@ -185,7 +185,7 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = True # включена интернационализация
 
 USE_L10N = True
 
@@ -282,3 +282,160 @@ CACHES = {
         # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
     }
 }
+
+
+#  логгирование
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+
+    # filter
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }
+    },
+
+    # formatter
+    'formatters': {
+        # задание 13.4 пункт 1
+        'format_debug': {
+            'format': '{asctime} {levelname} {message}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+        'format_warning': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+        'format_error_critical': {
+            'format': '{asctime} {levelname} {message} {pathname} {exc_info}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+        'format_general': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+
+        # задание 13.4 п.4
+        'format_security': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        },
+
+        # задание 13.4 п.5
+        'format_errors': {
+            'format': '{asctime} {levelname} {message} {pathname}',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'style': '{',
+        }
+    },
+
+    # handler
+    'handlers': {
+        # задание 13.4 п.1
+        'console_debug': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_false'], # false - отключено
+            'class': 'logging.StreamHandler',
+            'formatter': 'format_debug',
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'format_warning'
+        },
+        'console_errors': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'format_error_critical'
+        },
+
+        # задание 13.4 п.3
+        'file_errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'format_error_critical'
+        },
+
+        # задание 13.4 п.2
+        'general_log': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'format_general'
+        },
+
+        # задание 13.4 п.4
+        'security_log': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+            'formatter': 'format_security'
+        },
+
+        # задание 13.4 п.5
+        'mail_admins': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+
+    },
+
+    # LOGGER
+    # задание 13.4 п.1,
+    # задание 13.4 п.2 - добавлено значение в handlers = 'general_log'
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_warning', 'console_errors', 'general_log'],  # choosing handler names which where specified above
+            'level': 'DEBUG',  # choosing the same or above level than it's specified in handlers. Otherwise, we won't be able to handle some of them.
+        },
+
+
+        # задание 13.4 п.3
+        # задание 13.4 п.5 - добавлено
+        'django.request': {
+            'handlers': ['file_errors', 'mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.server': {
+            'handlers': ['file_errors', 'mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.template': {
+            'handlers': ['file_errors'],
+            'level': 'ERROR',
+        },
+        'django.db_backends': {
+            'handlers': ['file_errors'],
+            'level': 'ERROR',
+        },
+
+        # задание 13.4 п.4
+        'django.security': {
+            'handlers': ['security_log'],
+            'level': 'INFO',
+        },
+    },
+
+}
+
+# локализация
+LOCALE_PATH = [
+    os.path.join(BASE_DIR, 'locale')
+]
