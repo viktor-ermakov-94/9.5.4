@@ -7,6 +7,12 @@ from django.template.defaultfilters import truncatewords
 from django.http import request, HttpRequest
 from django.conf import settings
 
+# импортируем функцию для локализации
+from django.utils.translation import gettext_lazy as _
+
+# импортируем "ленивый" геттекст с подсказкой
+from django.utils.translation import pgettext_lazy
+
 
 # создаем модель автора
 
@@ -46,7 +52,7 @@ class Author(models.Model):
 class Category(models.Model):
     # категории статей/новостей - темы, которые они отражают (спорт, политика, образование и т. д.)
     # данное поле делаем уникальным
-    article_category = models.CharField(max_length=255, unique=True)
+    article_category = models.CharField(max_length=255, unique=True, help_text=_('category name')) # добавим переводящийся текст подсказку
 
     # эта функция позволяет вернуть поле article_category при вызове экземпляра модели Category
     def __str__(self):
@@ -60,7 +66,7 @@ class Post(models.Model):
     # связь один ко многим с Author
     post_author = models.ForeignKey(Author, on_delete=models.CASCADE)
     # связь многие ко многим с Category
-    post_category = models.ManyToManyField(Category, related_name='post_category', )
+    post_category = models.ManyToManyField(Category, related_name='post_category', verbose_name=_('category of the post'))
 
     """ <<< Настройка выбора категории поста >>> """
     # варианты для поля с выбором (статья или новость)
@@ -82,7 +88,7 @@ class Post(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     # заголовок статьи/новости
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, verbose_name=_('title of the post'))
 
     # текст статьи/новости
     content = models.TextField()

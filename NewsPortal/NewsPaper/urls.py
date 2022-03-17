@@ -10,8 +10,7 @@ from .views import upgrade_me, subscribe
 from django.views.decorators.cache import cache_page
 
 urlpatterns = [
-    path('', cache_page(60*1)(
-        PostsList.as_view()), name='home'),
+    path('', cache_page(60*1)(PostsList.as_view()), name='home'),
 
     # детали поста
     path('<int:pk>/', PostDetailedView.as_view(), name='post_details'),
@@ -31,5 +30,7 @@ urlpatterns = [
 
     path('<int:pk>/subscribe/', subscribe, name='subscription'),
     # path('subscribe/', subscribe, name='subscription'),
+
+
 
 ]

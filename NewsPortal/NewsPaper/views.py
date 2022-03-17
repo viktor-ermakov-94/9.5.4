@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 # импортируем класс, который говорит нам о том,
@@ -37,6 +38,14 @@ from django.core.cache import cache
 
 # импортируем логгер
 import logging
+
+# импортируем функцию для локализации
+from django.utils.translation import gettext as _
+
+# импортируем "ленивый" геттекст с подсказкой
+from django.utils.translation import pgettext_lazy
+
+
 
 logger = logging.getLogger(__name__)  # dundername берет название приложения, как имя логгера
 
@@ -216,3 +225,16 @@ def subscribe(request, **kwargs):  # request = <WSGIRequest: GET '/subscribe/'> 
         Category.objects.get(id=i['id']).subscribers.add(request.user)
 
     return redirect('/news')
+
+
+# Локализация модели.
+class Index(View):
+    def get(self, request):
+        # . Translators: This message appears on the home page only
+        models = Category.objects.all()
+
+        context = {
+            'models': models,
+        }
+
+        return HttpResponse(render(request, 'index.html', context))

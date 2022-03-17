@@ -3,6 +3,9 @@ from django.contrib import admin
 # импортируем наши модели
 from .models import Post, Category
 
+# импортируем модель амдинки
+from modeltranslation.admin import TranslationAdmin
+
 
 def delete_posts(self, request, queryset):
     Post.objects.all().delete()
@@ -15,7 +18,7 @@ class PostsAdmin(admin.ModelAdmin):
     list_display = ('pk', 'date_created', 'title', 'category', 'zero_rated', 'article_category',)
 
     # фильтр справа
-    list_filter = ('category','post_category',)
+    list_filter = ('category', 'post_category',)
 
     # поисковый фильтр
     search_fields = ('title',)
@@ -23,12 +26,20 @@ class PostsAdmin(admin.ModelAdmin):
     # создание нестандартных команд
     actions = [delete_posts]
 
-
     def article_category(self, Post):
         return [i for i in Post.post_category.all()]
 
 
+class CategoryAdmin(TranslationAdmin):
+    model = Category
 
+
+# class PostAdmin(TranslationAdmin):
+#     model = Post
+
+
+# admin.site.register(Post)
+admin.site.register(Category)
 
 # и зарегистрируем их
 admin.site.register(Post, PostsAdmin)

@@ -4,6 +4,23 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load i18n %}
+
+<form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Set">
+</form>
+
 
 
 <head>
@@ -38,40 +55,36 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
+
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#">{% translate 'Home' %}<span class="sr-only">(current)</span></a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/news/">Новости</a>
+            <a class="nav-link" href="/news/">{% translate 'News' %}</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/news/search/">Поиск</a>
+            <a class="nav-link" href="/news/search/">{% translate 'Search' %}</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/news/create/">Создать</a>
+            <a class="nav-link" href="/news/create/">{% translate 'Create' %}</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/make_appointment/">Назначить встречу</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/subscribe/">Оформить подписку на спорт {{ category.article_category.id }}</a>
+            <a class="nav-link" href="/make_appointment/">{% translate 'Make an appointment' %}</a>
           </li>
 
           {% if is_not_premium %}
           <li class="nav-item">
-            <button1> <a class="nav-link" href="sign/upgrade/">Стать автором</a></button1>
+            <button1> <a class="nav-link" href="sign/upgrade/">{% translate 'To became an author' %}</a></button1>
           </li>
           {% endif %}
 
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="/accounts/logout/">Выйти</a>
+            <a class="nav-link" href="/accounts/logout/">{% translate 'Quit' %}</a>
             </li>
           {% endif %}
 
