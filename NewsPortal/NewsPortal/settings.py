@@ -438,3 +438,7 @@ LOGGING = {
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale')
 ]
+
+
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'ru')
+

@@ -152,7 +152,7 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     template_name = 'newspaper/post_create.html'
     form_class = PostForm
     permission_required = 'NewsPaper.add_post'
-    print(model.objects.all())
+    # print(model.objects.all())
 
 
 class PostSearch(ListView):
