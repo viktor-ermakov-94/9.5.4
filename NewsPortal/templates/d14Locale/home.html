@@ -1,0 +1,17 @@
+<html lang="en">
+
+{% load i18n %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans 'Page title' %}</title>
+</head>
+<body>
+    {{ string }} <!-- переменная из HomePageView(View) -->
+
+    {% trans 'Check out my new cool translation' %}! <!-- Переводим строку -->
+
+</body>
+</html>
