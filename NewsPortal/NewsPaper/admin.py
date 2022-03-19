@@ -30,18 +30,19 @@ class PostsAdmin(admin.ModelAdmin):
         return [i for i in Post.post_category.all()]
 
 
+# локализация
 class CategoryAdmin(TranslationAdmin):
     model = Category
 
 
-# class PostAdmin(TranslationAdmin):
-#     model = Post
+class PostAdmin(TranslationAdmin):
+    model = Post
 
 
-# admin.site.register(Post)
+admin.site.register(Post)
 admin.site.register(Category)
 
 # и зарегистрируем их
-admin.site.register(Post, PostsAdmin)
+# admin.site.register(PostsAdmin)
 # admin.site.register(Category)
 # admin.site.register(Author)

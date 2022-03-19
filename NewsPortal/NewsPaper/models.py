@@ -135,7 +135,7 @@ class Post(models.Model):
 class PostCategory(models.Model):
     # связь «один ко многим» с моделью Post
     post_category = models.ForeignKey(Post, on_delete=models.CASCADE)
-    # связь «один ко многим» с моделью Category
+    # связь «многие ко многим» с моделью Category
     category_category = models.ManyToManyField(Category)
 
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

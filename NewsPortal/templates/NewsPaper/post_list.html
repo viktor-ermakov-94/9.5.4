@@ -16,10 +16,6 @@
 {# <hr> #}
 {# <h6>Список новостей: {{ post_list }}</h6> #}
 
-{# согласно синтаксису языка шаблонов Django, #}
-<! переменные должны быть окружены двойными фигурными скобками {{ news }} >
-{# а теги в одну фигурную скобку и символ "%": {% news %} пишутся, когда нужно задать условие #}
-
 
 <hr>
 
@@ -53,6 +49,9 @@
                 <b>
                     Первые 20 слов текста статьи
                 </b>
+                <b>
+                    Категория статьи
+                </b>
             </td>
         </tr>
         {% for post in post_list %}
@@ -75,7 +74,8 @@
 
              <td>
                  {{ post.post_category.article_category }}
-                {% for category in category %}
+
+                {% for category in post.post_category %}
                     {{ category.article_category }}
                 {% endfor %}
             </td>
