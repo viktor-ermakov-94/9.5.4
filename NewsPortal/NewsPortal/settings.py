@@ -79,6 +79,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'D14Locale.d14middlewares.TimezoneMiddleware',  # my middleware for timezone of D14Locale application
+
+    'NewsPaper.middlewares.TimezoneMiddleware',  # my middleware for timezone of NewsPaper application
 ]
 
 ROOT_URLCONF = 'NewsPortal.urls'
@@ -274,13 +278,13 @@ CELERY_IMPORTS = (
 )
 
 # кэширование
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
-        # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+#         # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+#     }
+# }
 
 
 #  логгирование

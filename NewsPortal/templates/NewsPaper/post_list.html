@@ -1,5 +1,6 @@
 <! -- наследование шаблона default -->
 {% extends 'flatpages/default.html' %}
+{% load tz %}
 
 {% block title %} News {% endblock title %}
 
@@ -7,6 +8,26 @@
 
 <! -- начало контента -->
 {% block content %}
+
+
+
+<!--You can get the name of the current time zone using the get_current_timezone tag:-->
+{% get_current_timezone as TIME_ZONE %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="timezone">Time zone:</label>
+    <select name="timezone">
+        {% for tz in timezones %}
+        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Set">
+</form>
+
+
+{{ TIME_ZONE }}
+{{ current_time|timezone:TIME_ZONE }} <!-- Отображаем время в выбранном часовом поясе  -->
+
 
 
 

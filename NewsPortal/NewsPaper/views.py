@@ -45,7 +45,10 @@ from django.utils.translation import gettext as _
 # импортируем "ленивый" геттекст с подсказкой
 from django.utils.translation import pgettext_lazy
 
-
+# импортируем часовые пояса
+from django.utils import timezone
+# импортируем стандартный модуль для работы с часовыми поясами
+import pytz
 
 logger = logging.getLogger(__name__)  # dundername берет название приложения, как имя логгера
 
@@ -53,8 +56,10 @@ logger = logging.getLogger(__name__)  # dundername берет название �
 def index(request):
     logger.info('INFO')
 
+
 def debugger(request):
     logger.debug('DEBUG')
+
 
 # создадим модель объектов, которые будем выводить
 # Используется ListView - определяет список объектов, которые хотим отобразить.
@@ -82,29 +87,46 @@ class PostsList(ListView):
     # добавим ссылку на форму:
     form_class = PostForm
 
+
+
     # пишем модуль, который принимает на вход отфильтрованные объекты
     def get_context_data(self, **kwargs):
         # распаковываем self = Posts
-        context = super().get_context_data(**kwargs)
-        context['categories'] = PostCategory.objects.all()
-        return context
+        common_timezones = {
+            'Europe/Paris': 'Paris',
+            'Europe/Moscow': 'Moscow',
+        }
+
+        # context['categories'] = PostCategory.objects.all()
+
+        return {
+            **super().get_context_data(**kwargs),
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': common_timezones
+        }
+
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')
+
 
     # сортируем все объекты модели Post по параметру даты создания в обратном порядке:
     def get_queryset(self):
         qset = super().get_queryset()
         return qset.order_by('id', '-date_created')
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-        return super().get(request, *args, **kwargs)
+    # def post(self, request, *args, **kwargs):
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #
+    #     return super().get(request, *args, **kwargs)
 
     # проверем, находится или нет пользователь в группе premium
     # делаем запрос на получение содержания (контекста)
-    def get_context_data(self, **kwargs):
+    def get_context_data_2(self, **kwargs):
         # получаем весь контекст из класса родителя
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data_2(**kwargs)
         # добавляем новую переменную в Qset полученного контекста:
         # запрашиваем есть ли текущий пользователь в группе по фильтру author,
         # метод exists() вернет True, если группа premium находится в списке групп пользователя
@@ -112,8 +134,10 @@ class PostsList(ListView):
         # если пользователь не находится в этой группе, то exist() вернет False. not False вернет True - то, что нужно
         context['is_not_premium'] = not self.request.user.groups.filter(name='author').exists()
         # context['is_not_premium'] = True
+
         # возвращаем контекст
         return context
+
 
 
 class WeekList(ListView):
@@ -227,14 +251,25 @@ def subscribe(request, **kwargs):  # request = <WSGIRequest: GET '/subscribe/'> 
     return redirect('/news')
 
 
-# Локализация модели.
 class Index(View):
     def get(self, request):
+        # Локализация времени
+        current_time = timezone.now()
+
         # . Translators: This message appears on the home page only
         models = Category.objects.all()
 
         context = {
             'models': models,
+            'current_time': timezone.now(),
+            'timezones': pytz.common_timezones  # добавляем в контекст все доступные часовые пояса
         }
 
-        return HttpResponse(render(request, 'index.html', context))
+        return HttpResponse(render(request, 'default.html', context))
+
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')
+
+
+
