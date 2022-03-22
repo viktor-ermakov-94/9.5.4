@@ -98,9 +98,11 @@ class PostsList(ListView):
         }
 
         # context['categories'] = PostCategory.objects.all()
+        context = super().get_context_data(**kwargs)
+        print(context, timezone.localtime(timezone.now()))
 
         return {
-            **super().get_context_data(**kwargs),
+            **context,
             'current_time': timezone.localtime(timezone.now()),
             'timezones': common_timezones
         }
@@ -124,19 +126,19 @@ class PostsList(ListView):
 
     # проверем, находится или нет пользователь в группе premium
     # делаем запрос на получение содержания (контекста)
-    def get_context_data_2(self, **kwargs):
-        # получаем весь контекст из класса родителя
-        context = super().get_context_data_2(**kwargs)
-        # добавляем новую переменную в Qset полученного контекста:
-        # запрашиваем есть ли текущий пользователь в группе по фильтру author,
-        # метод exists() вернет True, если группа premium находится в списке групп пользователя
-        # not True даст False - а нам нужен True
-        # если пользователь не находится в этой группе, то exist() вернет False. not False вернет True - то, что нужно
-        context['is_not_premium'] = not self.request.user.groups.filter(name='author').exists()
-        # context['is_not_premium'] = True
-
-        # возвращаем контекст
-        return context
+    # def get_context_data_2(self, **kwargs):
+    #     # получаем весь контекст из класса родителя
+    #     context = super().get_context_data_2(**kwargs)
+    #     # добавляем новую переменную в Qset полученного контекста:
+    #     # запрашиваем есть ли текущий пользователь в группе по фильтру author,
+    #     # метод exists() вернет True, если группа premium находится в списке групп пользователя
+    #     # not True даст False - а нам нужен True
+    #     # если пользователь не находится в этой группе, то exist() вернет False. not False вернет True - то, что нужно
+    #     context['is_not_premium'] = not self.request.user.groups.filter(name='author').exists()
+    #     # context['is_not_premium'] = True
+    #
+    #     # возвращаем контекст
+    #     return context
 
 
 

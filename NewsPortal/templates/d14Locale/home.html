@@ -15,10 +15,12 @@
     {% trans 'Check out my new cool translation' %}! <!-- Переводим строку -->
 
 
-{% load tz %}
-{% get_current_timezone as TIME_ZONE %}
 
-<form action="{% url 'set_timezone' %}" method="POST">
+</body>
+
+{% get_current_timezone as TIME_ZONE %}
+<body>
+<form action="" method="POST">
     {% csrf_token %}
     <label for="timezone">Time zone:</label>
     <select name="timezone">
@@ -31,8 +33,6 @@
 
 {{ TIME_ZONE }}
 {{ current_time|timezone:TIME_ZONE }} <!-- Отображаем время в выбранном часовом поясе  -->
-
-
 
 </body>
 
