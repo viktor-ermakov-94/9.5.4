@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-13 23:51+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: .\D14Locale\views.py:14
+msgid "Hello World"
+msgstr "Привет, Мир!"
+
+#: .\NewsPaper\models.py:55
+msgid "category name"
+msgstr ""
+
+#: .\NewsPaper\models.py:69
+msgid "category of the post"
+msgstr ""
+
+#: .\NewsPaper\models.py:91
+msgid "title of the post"
+msgstr "Название поста"
+
+#: .\NewsPortal\settings.py:180
+msgid "Russian"
+msgstr ""
+
+#: .\NewsPortal\settings.py:181
+msgid "English"
+msgstr ""
+
+#: .\templates\NewsPaper\week_posts.html:10
+msgid "Дайджест новостей за прошедшую неделю в категории"
+msgstr ""
+
+#: .\templates\d14Locale\home.html:9
+msgid "Page title"
+msgstr "Заголовок страницы"
+
+#: .\templates\d14Locale\home.html:14
+msgid "Check out my new cool translation"
+msgstr "Зацени мой новый крутой перевод"
+
+#: .\templates\flatpages\default.html:60
+msgid "Home"
+msgstr "Домой"
+
+#: .\templates\flatpages\default.html:64
+msgid "News"
+msgstr "Новости"
+
+#: .\templates\flatpages\default.html:68
+msgid "Search"
+msgstr "Найти"
+
+#: .\templates\flatpages\default.html:72
+msgid "Create"
+msgstr "Создать"
+
+#: .\templates\flatpages\default.html:76
+msgid "Make an appointment"
+msgstr "Назначить встречу"
+
+#: .\templates\flatpages\default.html:80
+msgid "Subscribe to sports"
+msgstr "Подписка на спорт"
+
+#: .\templates\flatpages\default.html:85
+msgid "To became an author"
+msgstr "Стать автором"
+
+#: .\templates\flatpages\default.html:91
+msgid "Quit"
+msgstr "Выход"
